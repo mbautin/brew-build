@@ -18,11 +18,9 @@ jobs:
 
   steps:
     - script: |
+        set -euxo pipefail
         repo_dir=$PWD
         tag=v0.$( git rev-list --count HEAD )
-        set -x
-        git tag "$tag"
-        git push "$tag"
         hub release create "$tag" -m "Release $tag"
         mkdir ~/linuxbrew_versions
         cd ~/linuxbrew_versions
