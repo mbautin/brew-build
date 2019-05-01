@@ -21,10 +21,17 @@ jobs:
         set -euxo pipefail
         repo_dir=$PWD
         tag=v0.$( git rev-list --count HEAD )
-        hub release create "$tag" -m "Release $tag"
         mkdir ~/linuxbrew_versions
         cd ~/linuxbrew_versions
-        # "$repo_dir/linuxbrew-clone-and-build-all.sh"
+        #"$repo_dir/linuxbrew-clone-and-build-all.sh"
+        touch "$tag"_artifact1.tar.gz
+        touch "$tag"_artifact2.tar.gz
+        create_release_cmd=( hub release create "$tag" -m "Release $tag" )
+        for f in *.tar.gz; do
+          create_release_cmd+=( -a "$PWD/$f" )
+        done
+        cd "$repo_dir"
+        "${create_release_cmd[@]}"
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
         
