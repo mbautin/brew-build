@@ -19,6 +19,7 @@ jobs:
   steps:
     - script: |
         set -euxo pipefail
+        echo $( yugabyte.githubToken )
         repo_dir=$PWD
         tag=v0.$( git rev-list --count HEAD )
         mkdir ~/linuxbrew_versions
