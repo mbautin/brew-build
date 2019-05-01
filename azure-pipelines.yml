@@ -19,12 +19,14 @@ jobs:
   steps:
     - script: |
         repo_dir=$PWD
+        tag=v0.$( git rev-list --count HEAD )
+        set -x
+        git tag "$tag"
+        git push "$tag"
+        hub release create "$tag" -m "Release $tag"
         mkdir ~/linuxbrew_versions
         cd ~/linuxbrew_versions
-        tag=v0.$( git rev-list --count HEAD )
-        git tag "$tag"
-        hub release create "$tag" -m "Release $tag"
-        "$repo_dir/linuxbrew-clone-and-build-all.sh"
+        # "$repo_dir/linuxbrew-clone-and-build-all.sh"
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
         
