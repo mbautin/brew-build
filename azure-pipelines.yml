@@ -21,6 +21,8 @@ jobs:
         sudo mkdir -p /opt/yugabyte-build
         sudo chown yugabyte-ci /opt/yugabyte-build
         checkout_dir=$PWD
+        chmod -R a+r "$checkout_dir"
+        # find "$checkout_dir" -executable -type f -exec chmod a+x {} \;
         sudo -u yugabyte-ci -i "$checkout_dir/build-and-release.sh"
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
