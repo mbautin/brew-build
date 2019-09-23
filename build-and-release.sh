@@ -9,8 +9,7 @@ num_commits=$( printf "%06d" $num_commits )
 tag=v${timestamp}__${num_commits}__$( git rev-parse HEAD )
 top_dir_name=yb-linuxbrew-$tag
 linuxbrew_dir=/opt/yugabyte-build/linuxbrew-versions/$top_dir_name
-sudo mkdir -p "$linuxbrew_dir"
-sudo chown -R "$USER" "$linuxbrew_dir"
+mkdir -p "$linuxbrew_dir"
 touch "$linuxbrew_dir"/foo
 touch "$linuxbrew_dir"/far
 tar cvzf "$top_dir_name.tar.gz" "$linuxbrew_dir"

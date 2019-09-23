@@ -18,6 +18,8 @@ jobs:
 
   steps:
     - script: |
-        sudo -u yugabyte-ci ./build-and-release.sh
+        sudo mkdir -p /opt/yugabyte-build
+        sudo chown yugabyte-ci /opt/yugabyte-build
+        sudo -u yugabyte-ci -i ./build-and-release.sh
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
