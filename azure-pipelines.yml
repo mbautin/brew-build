@@ -1,7 +1,7 @@
 resources:
   containers:
-  - container: u18
-    image: yugabytedb/yb_build_infra_ubuntu1804:v2019-04-30T20_16_36_mikhail
+  - container: centos7
+    image: yugabytedb/yb_build_infra_centos7:v2019-09-01T14_58_09_mbautin
 
 jobs:
 - job: RunInContainer
@@ -20,19 +20,21 @@ jobs:
     - script: |
         set -euxo pipefail
         repo_dir=$PWD
-        tag=v0.$( git rev-list --count HEAD )
-        mkdir ~/linuxbrew_versions
-        cd ~/linuxbrew_versions
-        #"$repo_dir/linuxbrew-clone-and-build-all.sh"
-        touch foo
-        touch bar
-        tar cvzf myarchive.tar.gz foo bar
+        timestamp=$( date +%Y-%m-%dT%H_%M_%S )
+        num_commits=$( git rev-list --count HEAD )
+        num_commits=$( printf "%06d" $num_commits )
+        tag=v${timestamp}__${num_commits}__$( git rev-parse HEAD )
+        top_dir_name=yb-linuxbrew-$tag
+        linuxbrew_dir=/opt/yugabyte-build/linuxbrew-versions/$top_dir_name
+        touch "$linuxbrew_dir"/foo
+        touch "$linuxbrew_dir"/far
+        tar cvzf "$top_dir_name.tar.gz" "$linuxbrew_dir"
         create_release_cmd=( hub release create "$tag" -m "Release $tag" )
         for f in *.tar.gz; do
-          create_release_cmd+=( -a "$PWD/$f" )
+          create_release_cmd+=( -a "$PWD/$top_dir_name.tar.gz" )
         done
-        cd "$repo_dir"
         "${create_release_cmd[@]}"
+        # "$repo_dir/linuxbrew-clone-and-build-all.sh"
+        # cd "$repo_dir"
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
-        
