@@ -11,8 +11,8 @@ jobs:
 
   strategy:
     matrix:
-      ubuntu18:
-        containerResource: u18
+      centos7:
+        containerResource: centos7
 
   container: $[ variables['containerResource'] ]
 
