@@ -3,26 +3,33 @@ resources:
   - container: centos7
     image: yugabytedb/yb_build_infra_centos7:v2019-09-01T14_58_09_mbautin
 
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?view=azure-devops&tabs=yaml
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
 jobs:
-- job: RunInContainer
-  pool:
-    vmImage: 'ubuntu-16.04'
-  timeoutInMinutes: 0
+  - job: RunInContainer
+    pool:
+      vmImage: 'ubuntu-16.04'
+    timeoutInMinutes: 0
 
-  strategy:
-    matrix:
-      centos7:
-        containerResource: centos7
+    strategy:
+      matrix:
+        centos7:
+          containerResource: centos7
 
-  container: $[ variables['containerResource'] ]
+    container: $[ variables['containerResource'] ]
 
-  steps:
-    - script: |
-        sudo mkdir -p /opt/yugabyte-build
-        sudo chown yugabyte-ci /opt/yugabyte-build
-        checkout_dir=$PWD
-        chmod -R a+r "$checkout_dir"
-        # find "$checkout_dir" -executable -type f -exec chmod a+x {} \;
-        sudo -u yugabyte-ci -i "$checkout_dir/build-and-release.sh"
-      env:
-        GITHUB_TOKEN: $(yugabyte.githubToken)
+    steps:
+      - script: |
+          sudo mkdir -p /opt/yugabyte-build
+          sudo chown yugabyte-ci /opt/yugabyte-build
+          checkout_dir=$PWD
+          chmod -R a+r "$checkout_dir"
+          # find "$checkout_dir" -executable -type f -exec chmod a+x {} \;
+          sudo -u yugabyte-ci -i "$checkout_dir/build-and-release.sh"
+        env:
+          GITHUB_TOKEN: $(yugabyte.githubToken)
