@@ -20,6 +20,7 @@ jobs:
     - script: |
         sudo mkdir -p /opt/yugabyte-build
         sudo chown yugabyte-ci /opt/yugabyte-build
-        sudo -u yugabyte-ci -i ./build-and-release.sh
+        checkout_dir=$PWD
+        sudo -u yugabyte-ci -i "$checkout_dir/build-and-release.sh"
       env:
         GITHUB_TOKEN: $(yugabyte.githubToken)
