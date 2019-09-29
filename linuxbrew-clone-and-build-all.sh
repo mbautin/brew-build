@@ -32,7 +32,18 @@ time (
     fi
     rm -f "latest_brew_clone_dir.txt"
     "$YB_LINUXBREW_BUILD_ROOT"/linuxbrew-clone.sh
+    set -x
     brew_home=$( cat "latest_brew_clone_dir.txt" )
+    brew_path_prefix=$( cat "latest_brew_path_prefix.txt" )
+    archive_path=$brew_path_prefix.tar.gz
+    if [[ -d $brew_home && -e $archive_path ]]; then
+      if [[ ${YB_BREW_REUSE_PREBUILT:-} == "1" ]]; then
+        log "File $archive_path already exists, will not rebuild."
+        continue
+      else
+        fatal "File $archive_path already exists"
+      fi
+    fi
     (
       set -x
       cd "$brew_home"

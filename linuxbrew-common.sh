@@ -93,7 +93,7 @@ get_escaped_sed_replacement_str() {
 }
 
 if [[ $OSTYPE == linux* ]]; then
-  YB_BREW_DIR_PREFIX=yb-linuxbrew
+  YB_BREW_DIR_PREFIX=linuxbrew
 else
-  YB_BREW_DIR_PREFIX=yb-homebrew
+  YB_BREW_DIR_PREFIX=homebrew
 fi

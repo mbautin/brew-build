@@ -22,8 +22,23 @@ set -euo pipefail
 . "${0%/*}/linuxbrew-common.sh"
 
 brew_path_prefix=$(get_brew_path_prefix)
+if [[ -d $brew_path_prefix ]]; then
+  fatal "Directory $brew_path_prefix already exists, cannot clone the repo."
+fi
+
+set -x
 git clone https://github.com/Homebrew/brew "$brew_path_prefix"
 brew_home=$(get_fixed_length_path "$brew_path_prefix")
-mv "$brew_path_prefix" "$brew_home"
+if [[ -d $brew_home ]]; then
+  if [[ ${YB_BREW_REUSE_PREBUILT:-} == "1" ]]; then
+    log "Directory $brew_home already exists, will reuse it."
+    rm -rf "$brew_path_prefix"
+  else
+    fatal "Directory $brew_home already exists!"
+  fi
+else
+  mv "$brew_path_prefix" "$brew_home"
+fi
 
 echo "$brew_home" >latest_brew_clone_dir.txt
+echo "$brew_path_prefix" >latest_brew_path_prefix.txt
