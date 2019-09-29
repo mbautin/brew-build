@@ -30,6 +30,8 @@ if [[ ! -d $this_repo_top_dir ]]; then
 fi
 
 export USER=$( whoami )
+export PATH=/usr/local/bin:$PATH
+
 repo_dir=$PWD
 timestamp=$( date +%Y-%m-%dT%H_%M_%S )
 num_commits=$( git rev-list --count HEAD )
