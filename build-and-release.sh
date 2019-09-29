@@ -44,7 +44,6 @@ cd "$linuxbrew_dir"
 create_release_cmd=( hub release create "$tag" -m "Release $tag" )
 has_files=false
 archive_prefix="$linuxbrew_dir/$YB_BREW_DIR_PREFIX-$YB_BREW_TIMESTAMP"
-set -x
 log "Looking for .tar.gz files and SHA256 checksum files with prefix: '$archive_prefix'"
 for f in "$archive_prefix.tar.gz" \
          "$archive_prefix.tar.gz.sha256" \

@@ -25,8 +25,8 @@ jobs:
 
     steps:
       - script: |
-          sudo mkdir -p /opt/yugabyte-build
-          sudo chown yugabyte-ci /opt/yugabyte-build
+          sudo mkdir -p /opt/yb-build
+          sudo chown yugabyte-ci /opt/yb-build
           checkout_dir=$PWD
           chmod -R a+r "$checkout_dir"
           find "$checkout_dir" -executable -type f -exec chmod a+x {} \;
