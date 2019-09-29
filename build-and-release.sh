@@ -30,4 +30,5 @@ done
 cd "$this_repo_top_dir"
 set -x
 git tag "$tag"
+git push --tags
 "${create_release_cmd[@]}"
