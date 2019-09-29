@@ -21,11 +21,9 @@ set -euo pipefail
 
 . "${0%/*}/linuxbrew-common.sh"
 
-BREW_LINK=$(get_brew_link)
-BREW_HOME=$(get_fixed_length_path "$BREW_LINK")
-git clone https://github.com/Linuxbrew/brew.git "$BREW_HOME"
-ln -s "$BREW_HOME" "$BREW_LINK"
-echo "Created link: $BREW_LINK -> $BREW_HOME"
+brew_path_prefix=$(get_brew_path_prefix)
+git clone https://github.com/Homebrew/brew "$brew_path_prefix"
+brew_home=$(get_fixed_length_path "$brew_path_prefix")
+mv "$brew_path_prefix" "$brew_home"
 
-echo "$BREW_HOME" >latest_brew_home.txt
-echo "$BREW_LINK" >latest_brew_link.txt
+echo "$brew_home" >latest_brew_clone_dir.txt

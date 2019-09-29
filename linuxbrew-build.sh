@@ -56,7 +56,11 @@ if [[ $YB_USE_SSE4 == "0" ]]; then
   export HOMEBREW_ARCH="core2"
 else
   echo "YB_USE_SSE4=$YB_USE_SSE4, enabling use of SSE4"
-  export HOMEBREW_ARCH="ivybridge"
+  # export HOMEBREW_ARCH="ivybridge"
+  # https://arnon.dk/which-architecture-should-i-compile-for/
+  # Ivy Bridge (Intel iN 3XXX and Xeons E3-12xx v2-series, E5-14xx v2/24xx v2-series, E5-16xx
+  # v2/26xx v2/46xx v2-series, E7-28xx v2/48xx v2/88xx v2-series) – -march=core-avx-i
+  export HOMEBREW_ARCH="core-avx-i"
 fi
 
 extra_flags="-mno-avx -mno-bmi -mno-bmi2 -mno-fma -no-abm -no-movbe"
@@ -74,7 +78,7 @@ cat <<EOF | patch "$openssl_formula"
 EOF
 unset sse4_args
 
-readonly LINUXBREW_PACKAGES=(
+LINUXBREW_PACKAGES=(
   autoconf
   automake
   bzip2
@@ -83,7 +87,6 @@ readonly LINUXBREW_PACKAGES=(
   icu4c
   libtool
   libuuid
-  maven
   ninja
   openssl
   readline
