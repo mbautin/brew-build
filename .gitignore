@@ -1,1 +1,8 @@
 *.sw?
+/brew_cache
+/brew_logs
+/homebrew-*
+/linuxbrew-*
+latest_brew_*.txt
+*.bak
+*.tmp

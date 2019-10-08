@@ -66,17 +66,35 @@ fi
 extra_flags="-mno-avx -mno-bmi -mno-bmi2 -mno-fma -no-abm -no-movbe"
 
 cp "$openssl_orig" "$openssl_formula"
-cat <<EOF | patch "$openssl_formula"
+openssl_rb_extra_line="args += %w[-march=$HOMEBREW_ARCH $extra_flags $sse4_flags]"
+if [[ $OSTYPE == linux* ]]; then
+  cat <<EOF | patch "$openssl_formula"
 @@ -61,6 +61,7 @@ class Openssl < Formula
        end
        args << "enable-md2"
      end
-+    args += %w[-march=$HOMEBREW_ARCH $extra_flags $sse4_flags]
++    $openssl_rb_extra_line
      system "perl", "./Configure", *args
      system "make", "depend"
      system "make"
 EOF
-unset sse4_args
+else
+  cat <<EOF | patch "$openssl_formula"
+diff --git a/Formula/openssl.rb b/Formula/openssl.rb
+index 5810436..83b213d 100644
+--- a/Formula/openssl.rb
++++ b/Formula/openssl.rb
+@@ -38,6 +38,7 @@ class Openssl < Formula
+       darwin64-x86_64-cc
+       enable-ec_nistp_64_gcc_128
+     ]
++    $openssl_rb_extra_line
+     system "perl", "./Configure", *args
+     system "make", "depend"
+     system "make"
+EOF
+fi
+unset sse4_flags
 
 LINUXBREW_PACKAGES=(
   autoconf
